@@ -67,7 +67,7 @@ class Utils {
 
 	static isWhitelistedUrl(whitelist, url) {
 		let _url = new URL(url);
-		_url.search = '';
+		_url.search = _url.hash = '';
 		_url = _url.toString();
 
 		return whitelist
