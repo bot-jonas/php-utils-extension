@@ -1,0 +1,3 @@
+- Use this when implementing options for the profiler: excludedTabIds -> https://developer.chrome.com/docs/extensions/reference/declarativeNetRequest/#type-RuleCondition
+- Make automatic tests
+- Create new tool to replace parts of urls

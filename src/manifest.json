@@ -1,0 +1,47 @@
+{
+	"background": {
+		"service_worker": "background.js"
+	},
+	"action": {
+		"default_icon": "php-128.png",
+		"default_popup": "popup-menu.html"
+	},
+	"content_scripts": [{
+		"all_frames": true,
+		"js": [
+			"js/Utils.js",
+			"js/PHPError.js",
+			"js/xdebug/XDebugUtilsOptions.js",
+			"js/xdebug/XDebugUtilsContentScript.js",
+			"contentscript.js"
+		],
+		"matches": [ "http://*/*", "https://*/*" ],
+		"run_at": "document_idle"
+	}],
+	"commands": {
+		"open_popup": {
+			"suggested_key": "Ctrl+M",
+			"description": "Open popup"
+		}
+	},
+	"description": "PHP Utils.",
+	"icons": {
+		"128": "php-128.png",
+		"48": "php-48.png"
+	},
+	"manifest_version": 3,
+	"name": "PHP Utils",
+	"options_page": "options.html",
+	"permissions": [
+		"storage", 
+		"scripting",
+		"tabs",
+		"declarativeNetRequest",
+		"contextMenus"
+	],
+	"host_permissions": [
+		"http://*/",
+		"https://*/"
+	],
+	"version": "0.1"
+}
