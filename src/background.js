@@ -124,16 +124,15 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
 				data[key].push({...d, tab_id: sender.tab.id, frame_id: message.data.frame_id});
 			});
 		}
+		sync_clients();
 	} else if(message.method === 'REMOVE_TAB') {
 		data.errors = data.errors.filter(d => d.tab_id != sender.tab.id || d.frame_id != message.data.frame_id);
 		data.var_dumps = data.var_dumps.filter(d => d.tab_id != sender.tab.id || d.frame_id != message.data.frame_id);
+		sync_clients();
 	} else if(message.method === 'PING') {
 		console.log('PING');
-	} else {
-		return;
 	}
-
-	sync_clients();
+	
 });
 
 chrome.tabs.onRemoved.addListener((tab_id, removed) => {
