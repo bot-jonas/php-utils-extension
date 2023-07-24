@@ -5,7 +5,6 @@ class XDebugUtilsContentScript {
 		this.options = options;
 
 		this._serial_id = 1;
-		this._ping_interval = 20 * 1000;
 
 		this._setup();
 	}
@@ -41,12 +40,6 @@ class XDebugUtilsContentScript {
 		});
 
 		this.port.onMessage.addListener(m => this.onMessage(m));
-
-		setInterval(() => {
-			chrome.runtime.sendMessage({
-				method: 'PING',
-			});
-		}, this._ping_interval);
 	}
 
 	onMessage(message) {

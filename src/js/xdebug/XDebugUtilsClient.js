@@ -6,11 +6,18 @@ class XDebugUtilsClient {
 		this.var_dumps = [];
 		this.onchange_listeners = [];
 		this.onclose_listeners = [];
+		this._ping_interval = 20 * 1000;
 	}
 
 	connect() {
 		this.port = chrome.runtime.connect({ name: `popup_${this.tab_id}` });
 		this.port.onMessage.addListener(m => this.onMessage(m));
+
+		setInterval(() => {
+			this.port.postMessage({
+				method: 'PING',
+			});
+		}, this._ping_interval);
 	}
 
 	onMessage(message) {
@@ -26,6 +33,8 @@ class XDebugUtilsClient {
 			this.onchange_listeners.forEach(f => f());
 		} else if(message.method === 'CLOSE_CLIENT') {
 			this.onclose_listeners.forEach(f => f());
+		} else if(message.method === 'PONG') {
+			console.log('PONG');
 		}
 	}
 

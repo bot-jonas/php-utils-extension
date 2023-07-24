@@ -108,6 +108,15 @@ function sync_clients() {
 	}));
 }
 
+function popupOnMessageHandler(message, port) {
+	if(message.method === 'PING') {
+		console.log('PING');
+		port.postMessage({
+			method: 'PONG'
+		});
+	}
+}
+
 // Content Script
 chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
 	if(message.method === 'SYNC_SERVER') {
@@ -129,8 +138,6 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
 		data.errors = data.errors.filter(d => d.tab_id != sender.tab.id || d.frame_id != message.data.frame_id);
 		data.var_dumps = data.var_dumps.filter(d => d.tab_id != sender.tab.id || d.frame_id != message.data.frame_id);
 		sync_clients();
-	} else if(message.method === 'PING') {
-		console.log('PING');
 	}
 	
 });
@@ -144,6 +151,8 @@ chrome.runtime.onConnect.addListener(port => {
 	if (port.name.startsWith('popup_')) {
 		const tab_id = parseInt(port.name.split('_')[1]);
 		const client = {port, tab_id};
+
+		port.onMessage.addListener(popupOnMessageHandler);
 
 		content_scripts.filter(p => p.sender.tab.id === tab_id).forEach(p => p.postMessage({method: 'HIDE_ELEMENTS'}));
 		
